@@ -1,0 +1,293 @@
+@font-face {
+    font-family: "Kenia";
+    src: url(Kenia/Kenia-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Karla";
+    src: url(Karla/Karla.ttf);
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url(Montserrat/Montserrat-Light.ttf);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* first */
+
+.first{
+    background-image: url(pic/background.jpg);
+}
+
+.header_first{
+    display: flex;
+}
+
+#logo{
+    padding-left: 122px;
+    padding-top: 47px;
+    width: 53px;
+    height: 80px;
+}
+
+.navigation{
+    padding-left: 190px;
+    padding-top: 74px;
+}
+
+.navigation_list{
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+}
+
+.navigation_list_text{
+    text-decoration: none;
+    font-size: 18px;
+    color:white
+}
+
+.header_second{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 338px;
+}
+
+.header_text{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 175px;
+    padding-top: 164px;
+    padding-left: 115px;
+}
+
+.header_text_1{
+    font-family: "Kenia";
+    font-size: 150px;
+    color:white
+}
+
+.header_text_2{
+    color:white
+}
+
+.phone{
+    position: relative;
+    top: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.iPhone{
+    z-index: 1;
+}
+
+.cable{
+    position: absolute;
+    bottom: 5px;
+    left: 45px;
+    z-index: 0;
+}
+
+/* second */
+
+.second{
+    background-color: #D53005;
+    height: 1024px;
+}
+
+#second_text{
+    color: white;
+    font-family: "Karla";
+    font-size: 30px;
+    padding-top: 83px;
+    padding-left: 122px;
+}
+
+.second_info{
+    display: flex;
+    justify-content: right;
+}
+
+.second_buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 124px;
+    padding-top: 285px;
+    padding-left: 215px;
+}
+
+.second_button_1 , .second_button_2{
+    color:white;
+    font-family: "Karla";
+    font-size: 40px;
+    background: radial-gradient(98.43% 2084.95% at 1.57% 7.83%, #B13E18 0%, #F3501A 100%);
+    padding-top: 18px;
+    padding-bottom: 18px;
+    padding-left: 93px;
+    padding-right: 93px;
+}
+
+/* third */
+
+.third{
+    background: linear-gradient(180deg, #D53005 0%, #000000 6.04%);
+    height: 1024px;
+}
+
+#third_text_1{
+    font-family: "Karla";
+    font-size: 30px;
+    color: white;
+    position: absolute;
+    top: 83px;
+    left: 122px;
+}
+
+.third {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.third_text_2 {
+    font-family: "Karla";
+    font-size: 30px;
+    color: white;
+}
+
+/* fourth */
+
+.fourth{
+    background-color: #D53005;
+}
+
+#fourth_main_text{
+    color: white;
+    padding-top: 83px;
+    padding-left: 122px;
+    font-family: "Karla";
+    font-size: 30px;
+}
+
+.fourth_info{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 130px;
+}
+
+.fourth_buttons_text{
+    display: flex;
+    flex-direction: column;
+    padding-top: 136px;
+}
+
+.fourth_button_1{
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    border-radius: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 80px;
+    margin-bottom: 53px;
+}
+
+.fourth_button_2{
+    background-color: #E3E3E3;
+    font-size: 20px;
+    border-radius: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 80px;
+    margin-bottom: 135px;
+}
+
+.fourth_text{
+    color:white;
+    font-family: "Montserrat";
+    font-size: 18px;
+}
+
+.fourth_text>p{
+    padding-left: 100px;
+    padding-top: 20px;
+    width: 400px;
+    text-align: center;
+}
+
+.Macbook_Pro{
+    padding-left: 40px;
+}
+
+/* fifth */
+
+.fifth{
+    background: linear-gradient(180deg, #D53005 0%, #000000 4.01%);
+}
+
+.fifth_info{
+    display: flex;
+    gap: 147px;
+    justify-content: center;
+    padding-left: 452px;
+    padding-top: 120px;
+}
+
+.fifth_info>ul{
+    list-style-type: none;
+}
+
+.fifth_info>ul>li{
+    color: white;
+    font-family: "Montserrat";
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+
+.fifth_info>ul>li>a{
+    text-decoration: none;
+    color: white;
+    font-family: "Montserrat";
+    font-size: 20px;
+}
+
+.licence{
+    color: white;
+    font-family: "Montserrat";
+    font-size: 15px;
+    padding-left: 110px;
+    padding-bottom: 92px;
+}
+
+.licence_text{
+    font-family: "Kenia";
+    font-size: 50px;
+}
+
+.licence_info{
+    display: flex;
+    gap: 99px;
+}
+
+.licence_info>p>a{
+    text-decoration: none;
+    color: white;
+    font-family: "Montserrat";
+    font-size: 15px;
+}
