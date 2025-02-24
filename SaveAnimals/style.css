@@ -1,0 +1,640 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: "Kulim Park";
+    src: url('Kulim_Park/KulimPark-BoldItalic.ttf');
+}
+
+@keyframes slide {
+    from {
+        left: -50px;
+    }
+    to {
+        left: 50%
+    }
+}
+
+@keyframes size {
+    to {
+        font-size: 100%;
+    }
+}
+
+@keyframes switch {
+    to {
+        grid-template-areas: 
+        ". dolphin"
+        "giraffe .";
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Навигация */
+nav {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 25px;
+}
+
+nav .info {
+    display: flex;
+    gap: 45px;
+}
+
+nav img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-170%, -40%);
+}
+
+nav a {
+    transition: font-size 0.3s ease;
+    color: black;
+}
+
+nav a:hover {
+    font-size: 18px;
+}
+
+.start-help {
+    border: 1px solid black;
+    border-radius: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.start-help:hover {
+    background-color: gainsboro;
+}
+
+/* Фото с сурикатами и текст */
+.meerkats {
+    position: relative;
+    padding-top: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.meerkats img {
+    width: 100%;
+    border-radius: 50px;
+}
+
+.meerkats h1 {
+    position: absolute;
+    top: 50px;
+    left: 80px;
+    width: 1500px;
+    font-size: 150px;
+    color: white;
+}
+
+.meerkats p {
+    position: absolute;
+    top: 300px;
+    right: 10px;
+    width: 800px;
+    font-size: 50px;
+    color: white;
+}
+
+.meerkats button {
+    position: absolute;
+    bottom: 50px;
+    transform: translateX(-165px);
+    width: 200px;
+    height: 200px;
+    border: 1px solid white;
+    border-radius: 100%;
+    font-size: 22px;
+    cursor: pointer;
+    color: #BF632F;
+    animation-name: slide;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+}
+
+.meerkats button::before {
+    position: absolute;
+    top: -15px;
+    right: -17px;
+    width: 230px;
+    height: 230px;
+    border: 1px solid white;
+    border-radius: 100%;
+    content: "";
+}
+
+.meerkats button:hover {
+    background-color: lightsalmon;
+}
+
+/* Лев и текст */
+#section-1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
+    padding-top: 100px;
+}
+
+#section-1 .description {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+#section-1 .description h2 {
+    width: 756px;
+    height: 102px;
+}
+
+#section-1 .description p {
+    width: 751px;
+    height: 138px;
+    font-size: 20px;
+}
+
+#section-1 .description button {
+    margin-top: 60px;
+    height: 66px;
+    background-color: #BC5E28;
+    transition: background-color 0.5s ease;
+    border-radius: 50px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+#section-1 .description button:hover {
+    background-color: #c8ff03;
+}
+
+/* Статистика */
+#section-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 100px;
+    margin-left: 25px;
+    gap: 25px;
+}
+
+#section-2 div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 103px;
+    font-size: 30px;
+}
+
+#section-2 div h2 {
+    animation: size;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* 2 картинки и что компания делает */
+#section-3 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding-top: 150px;
+}
+
+#section-3 .photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "dolphin ."
+    ". giraffe";
+    gap: 50px;
+    animation-name: switch;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#section-3 .photos img:first-child {
+    grid-area: dolphin;
+}
+
+#section-3 .photos img:last-child {
+    grid-area: giraffe;
+    align-self: flex-end;
+}
+
+#section-3 .projects {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+#section-3 .projects h2 {
+    font-size: 70px;
+}
+#section-3 .projects p {
+    width: 600px;
+    font-size: 20px;
+}
+
+#section-3 .projects ul li {
+    position: relative;
+    width: 700px;
+    list-style-type: none;
+    border-top: 1px solid black;
+    margin-top: 30px;
+    font-size: 25px;
+}
+
+#section-3 .projects ul li a {
+    color: black;
+}
+
+#section-3 .projects ul li::after {
+    position: absolute;
+    right: 30px;
+    transition: right 0.3s ease;
+    content: url('pictures/Right\ Arrow.png')
+}
+
+#section-3 .projects ul li:hover::after {
+    right: 0;
+}
+
+#section-3 .projects ul {
+    border-bottom: 1px solid black;
+}
+
+#section-3 .projects ul li:last-child {
+    margin-bottom: 30px;
+}
+
+/* Слоны и текст */
+.section-4 {
+    position: relative;
+    padding-top: 200px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.section-4 img {
+    width: 100%;
+    border-radius: 50px;
+}
+
+.section-4 .info-help {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-4 .info-help h2 {
+    position: absolute;    
+    top: 50%;
+    font-size: 50px;
+    color: white;
+}
+
+.section-4 .info-help pre {
+    position: absolute;
+    top: 50%;
+    transform: translate(-250px,100px);
+    width: 600px;
+    font-size: 20px;
+    color: white;
+    font-family: "Kulim Park", "sans-serif";
+}
+
+.section-4 .info-help button {
+    position: absolute;
+    top: 50%;
+    transform: translate(-25px, 250px);
+    width: 402px;
+    color: white;
+    background-color: transparent;
+    transition: background-color 0.5s ease;
+    border-radius: 50px;
+    border: 1px solid white;
+    padding: 10px 30px;
+    font-size: 20px;
+    font-family: "Kulim Park", "sans-serif";
+    cursor: pointer;
+}
+
+.section-4 .info-help button:hover {
+    background-color: #bf642fbe;
+}
+
+/* Подвал */
+footer {
+    margin-top: 150px;
+}
+
+.info-all {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-top: 1px solid black;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+.info-all ul li {
+    list-style-type: none;
+    padding-top: 15px;
+}
+
+.info-all ul li:first-child {
+    font-family: "Kulim Park", "sans-serif";
+    font-size: 25px;
+}
+
+.info-all ul li a {
+    position: relative;
+    font-family: "Kulim Park", "sans-serif";
+    color: black;
+}
+
+.info-all ul li a::after {
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease;
+    content: "";
+}
+
+.info-all ul li a:hover::after {
+    width: 100%;
+}
+
+.info-all .subscribe-news {
+    padding-top: 15px;
+}
+
+.info-all .subscribe-news p {
+    margin-bottom: 10px;
+    font-family: "Kulim Park", "sans-serif";
+    font-size: 20px;
+}
+
+.info-all .subscribe-news input[type="email"] {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+.info-all .subscribe-news input:focus {
+    outline: none;
+}
+
+.info-all .subscribe-news label[for="persData"] {
+    color:  gray;
+}
+
+.info-all .subscribe-news .social-media {
+    display: flex;
+    gap: 50px;
+    margin-top: 100px;
+}
+
+.info-all .subscribe-news .social-media a {
+    transition: background-color 0.3s ease;
+    color:  gray;
+    border: 1px solid gray;
+    border-radius: 50px;
+    padding: 10px 20px;
+}
+
+.info-all .subscribe-news .social-media a:hover {
+    background-color: rgba(220, 220, 220, 0.767);
+}
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 10px;
+    margin: 50px;
+}
+
+.contact-info p {
+    font-size: 15px;
+    color: gray;
+}
+
+@media (max-width: 1400px) {
+    .meerkats h1 {
+        width: 1000px;
+        font-size: 90px;
+    }
+    
+    .meerkats p {
+        top: 200px;
+        right: 5px;
+        width: 400px;
+        font-size: 25px;
+    }
+    
+    .meerkats button {
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-110px);
+        width: 100px;
+        height: 100px;
+        font-size: 15px;
+    }
+
+    .meerkats button::before {
+        width: 130px;
+        height: 130px;
+    }
+}
+@media (max-width: 1000px) {
+    .meerkats h1 {
+        top: 30px;
+        left: 50px;
+        width: 800px;
+        font-size: 70px;
+    }
+    
+    .meerkats p {
+        top: 150px;
+        right: 20px;
+        width: 300px;
+        font-size: 20px;
+    }
+    
+    .meerkats button {
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-10px);
+        width: 80px;
+        height: 80px;
+        font-size: 15px;
+    }
+
+    .meerkats button::before {
+        width: 110px;
+        height: 110px;
+    }
+
+    nav img {
+        transform: translate(25%, -40%);
+    }
+
+    .section-4 .info-help h2 {
+        font-size: 40px;
+    }
+    
+    .section-4 .info-help pre {
+        transform: translate(-100px,70px);
+        font-size: 15px;
+    }
+    
+    .section-4 .info-help button {
+        transform: translate(-25px, 170px);
+    }
+}
+
+@media (max-width: 700px) {
+    nav {
+        margin-top: 25px;
+    }
+
+    nav img {
+        top: 0%;
+        left: 0%;
+    }
+
+    nav .info {
+        gap: 5px;
+    }
+    
+    .meerkats h1 {
+        width: 200px;
+        font-size: 20px;
+    }
+    
+    .meerkats p {
+        top: 100px;
+        right: 30px;
+        width: 150px;
+        font-size: 10px;
+    }
+    
+    .meerkats button {
+        bottom: 50px;
+        transform: translate(-30px, 30px);
+        width: 50px;
+        height: 50px;
+        font-size: 10px;
+    }
+
+    .meerkats button::before {
+        width: 60px;
+        height: 60px;
+        top: -6px;
+        right: -7px;
+    }
+
+    #section-1 img {
+        width: 100%;
+    }
+
+    #section-1 .description h2 {
+        width: 300px;
+        height: auto;
+    }
+    
+    #section-1 .description p {
+        width: 300px;
+        height: auto;
+        margin-top: 30px;
+        font-size: 25px;
+    }
+    
+    #section-1 .description button {
+        margin-top: 60px;
+        height: 33px;
+        width: 100%;
+        font-size: 15px;
+    }
+
+    #section-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    #section-2 div {
+        font-size: 15px;
+    }
+
+    #section-3 .photos {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+        "dolphin"
+        "giraffe";
+        animation-name: none;
+    }
+
+    #section-3 .projects h2 {
+        margin-top: 50px;
+        width: 300px;
+        font-size: 30px;
+    }
+
+    #section-3 .projects p {
+        width: 300px;
+        font-size: 15px;
+    }
+
+    #section-3 .projects ul li {
+        width: 200px;
+    }
+
+    .section-4 .info-help h2 {  
+        top: 60%;
+        font-size: 20px;
+    }
+    
+    .section-4 .info-help pre {
+        top: 50%;
+        transform: translate(-135px,70px);
+        width: 200px;
+        font-size: 8px;
+    }
+    
+    .section-4 .info-help button {
+        top: 50%;
+        transform: translate(-10px, 130px);
+        padding: 5px 1px;
+        width: 150px;
+        font-size: 5px;
+    }
+
+    .contact-info {
+        gap: 50px;
+    }
+}
