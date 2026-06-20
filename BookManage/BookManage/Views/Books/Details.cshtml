@@ -1,0 +1,11 @@
+﻿@using BookManage.Models;
+@model Book;
+
+@if (Model.Id != -1)
+{
+    <p>@Model.Title; @Model.Author; @Model.Year</p>
+}
+else
+{
+    <p>Нет книги с таким id</p>
+}

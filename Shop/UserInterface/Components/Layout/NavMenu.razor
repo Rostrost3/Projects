@@ -1,0 +1,54 @@
+﻿@inject RoleService RoleService
+@inject NavigationManager NavManager
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+        <NavLink class="navbar-brand" href="/" Match="NavLinkMatch.All"><img src="images/shopicon.png" alt="Shop Icon" /></NavLink>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @if(isAdmin) {
+            <li class="nav-item">
+                <a class="nav-link" href="/addproduct">Add Product</a>
+            </li>
+        }
+      </ul>
+
+      <EditForm model="searchModel" OnValidSubmit="SubmitAsync" class="d-flex me-5">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <TextInput class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @bind-Value="searchModel.Pattern" />
+        <ValidationMessage For="@(() => searchModel.Pattern)"></ValidationMessage>
+
+        <button class="btn btn-primary" type="submit">Search</button>
+      </EditForm>
+
+    </div>
+
+    <div class="d-flex gap-3">
+      <NavLink href="/profile"><img src="images/profileicon.png" alt="Profile Icon" style="width: 50px; height: 50px;" /></NavLink>
+    </div>
+  </div>
+</nav>
+
+@code {
+    bool isAdmin = false;
+
+    SearchModel searchModel = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            isAdmin = await RoleService.IsAdmin();
+            StateHasChanged();
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        NavManager.NavigateTo($"/{searchModel.Pattern}");
+    }
+}

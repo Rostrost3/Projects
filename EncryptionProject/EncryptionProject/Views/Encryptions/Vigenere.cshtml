@@ -1,0 +1,30 @@
+﻿@model VigenereModel
+
+@{
+    ViewData["Title"] = "Vigenere";
+    Layout = "_Navigation";
+}
+
+<div class="centerForm">
+    <form asp-controller="Encryptions" asp-action="Vigenere" method="post" class="forms">
+        <div class="sectionInput">
+            <label asp-for="Text"></label>
+            <textarea asp-for="Text"></textarea>
+            <span asp-validation-for="Text"></span>
+        </div>
+
+        <div class="sectionInput">
+            <label asp-for="Key"></label>
+            <input asp-for="Key" />
+            <span asp-validation-for="Key"></span>
+        </div>
+
+        <div>
+            <label asp-for="IsEncryp"></label>
+            <input asp-for="IsEncryp" />
+            <span asp-validation-for="IsEncryp"></span>
+        </div>
+
+        <button type="submit">Result</button>
+    </form>
+</div>

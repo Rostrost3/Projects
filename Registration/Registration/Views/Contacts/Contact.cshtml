@@ -1,0 +1,13 @@
+﻿@model IEnumerable<UserRegistrationModel>
+
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<h1>Users</h1>
+@foreach(UserRegistrationModel item in Model)
+{
+    <h2>@item.Name</h2>
+    <h2>@item.Mail</h2>
+    <h2>@item.Age</h2>
+}

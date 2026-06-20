@@ -1,0 +1,26 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/formStyles.css" rel="stylesheet" />
+    <link href="~/css/navStyles.css" rel="stylesheet" />
+    <link href="~/css/resultStyles.css" rel="stylesheet" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a asp-controller="Encryptions" asp-action="Caesar">Шифр Цезаря</a></li>
+            <li><a asp-controller="Encryptions" asp-action="Vigenere">Шифр Виженера</a></li>
+            <li><a asp-controller="Encryptions" asp-action="Atbash">Шифр Атбаша</a></li>
+        </ul>
+    </nav>
+    @RenderBody()
+</body>
+</html>

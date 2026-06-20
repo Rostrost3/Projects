@@ -1,0 +1,90 @@
+﻿@page "/login"
+@layout EmptyLayout
+
+@inject SendRequestService SendRequestService
+@inject ILocalStorage LocalStorage
+@inject ForceExitService ForceExitService
+@inject NavigationManager NavManager
+
+<div class="d-flex flex-column justify-content-center align-items-center h-100">
+    <div class="card p-4 bg-light bg-gradient">
+        <h3 class="text-center mb-4">Login</h3>
+
+        <EditForm model="loginModel" OnValidSubmit="SubmitAsync">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <div class="mb-3">
+                <label class="form-label">Enter Email</label>
+                <TextInput id="email" @bind-Value="loginModel.Email"></TextInput>
+                <ValidationMessage For="@(() => loginModel.Email)"></ValidationMessage>
+        
+                @if(errors.ContainsKey("Email"))
+                {
+                    @foreach(var elem in errors["Email"])
+                    {
+                        <div class="text-danger">@elem</div>
+                    }
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Enter Password</label>
+                <PasswordInput id="password" @bind-Value="loginModel.Password"></PasswordInput>
+                <ValidationMessage For="@(() => loginModel.Password)"></ValidationMessage>
+
+                @if (errors.ContainsKey("Password"))
+                {
+                    @foreach (var elem in errors["Password"])
+                    {
+                        <div class="text-danger">@elem</div>
+                    }
+                }
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Login</Button>
+            </div>
+        </EditForm>
+
+        <div class="d-flex justify-content-end mt-3">
+            <a href="/reg" class="login-link">Registration</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    LoginModel loginModel = new();
+
+    Dictionary<string, List<string>> errors = new();
+
+    private async Task SubmitAsync()
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(loginModel);
+            using var response = await SendRequestService.SendAsync(HttpMethod.Post, "/api/user/login", json);
+            var streamResponse = await response!.Content.ReadAsStreamAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorsList = await JsonSerializer.DeserializeAsync<Dictionary<string, List<string>>>(streamResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if(errorsList != null)
+                {
+                    errors = errorsList;
+                }
+            }
+            else
+            {
+                var token = await JsonSerializer.DeserializeAsync<AuthResponse>(streamResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                await LocalStorage.SetKeyAsync(token!.Token);
+                NavManager.NavigateTo("/");
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"ERROR {ex.Message}");
+            await ForceExitService.Exit();
+        }
+    }
+}

@@ -1,0 +1,30 @@
+﻿@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Success</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" />
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+
+    <div class="card shadow-lg text-center p-4" style="max-width: 500px; border-radius: 1rem;">
+        <div class="card-body">
+            <h2 class="text-success mb-3">✅ Success!</h2>
+            <p class="lead">@Model</p>
+
+            <a asp-controller="Home" asp-action="Main" class="btn btn-primary mt-3 px-4">
+                Go to Main Page
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

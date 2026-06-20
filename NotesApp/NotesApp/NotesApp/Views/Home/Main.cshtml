@@ -1,0 +1,31 @@
+﻿@model List<Note>
+
+@{
+    Layout = "_Navigation";
+    ViewData["Title"] = "Main";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Your Notes</h2>
+    <a class="btn btn-success" asp-controller="Notes" asp-action="NewNote">➕ Create new Note</a>
+</div>
+
+<div class="row g-3">
+    @foreach (var note in Model)
+    {
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <img src="@Url.Content("~/images/Note.png")" class="card-img-top" alt="Note image">
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@note.Title</h5>
+
+                    <div class="mt-auto d-flex justify-content-between">
+                        <a class="btn btn-primary btn-sm" asp-controller="Notes" asp-action="Note" asp-route-id="@note.Id">Open</a>
+                        <a class="btn btn-danger btn-sm" asp-controller="Notes" asp-action="DeleteNote" asp-route-id="@note.Id">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

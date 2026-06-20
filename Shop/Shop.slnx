@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Database/Database.csproj" />
+  <Project Path="DTO/DTO.csproj" Id="73a7f7db-558f-4d9c-8fc2-f3658333fa74" />
+  <Project Path="UserInterface/UserInterface.csproj" />
+  <Project Path="WebApi/WebApi.csproj" />
+</Solution>

@@ -1,0 +1,30 @@
+﻿@model CaesarModel
+
+@{
+    ViewData["Title"] = "Caesar";
+    Layout = "_Navigation";
+}
+
+<div class="centerForm">
+    <form asp-controller="Encryptions" asp-action="Caesar" method="post" class="forms">
+        <div class="sectionInput">
+            <label asp-for="Text"></label>
+            <textarea asp-for="Text" cols="15"></textarea>
+            <span asp-validation-for="Text"></span>
+        </div>
+        
+        <div class="sectionInput">
+            <label asp-for="Shift"></label>
+            <input asp-for="Shift" />
+            <span asp-validation-for="Shift"></span>
+        </div>
+
+        <div>
+            <label asp-for="IsEncryp"></label>
+            <input asp-for="IsEncryp" />
+            <span asp-validation-for="IsEncryp"></span>
+        </div>
+
+        <button type="submit">Result</button>
+    </form>
+</div>

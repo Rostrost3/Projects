@@ -1,0 +1,47 @@
+﻿@model UserRegistrationModel
+
+<div class="reg-form">
+    <br />
+    <form asp-controller="RegistrationUser" asp-action="Registration" method="post">
+
+        <br />
+
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+
+        <br />
+
+        <label asp-for="Mail"></label>
+        <input asp-for="Mail" />
+        <span asp-validation-for="Mail"></span>
+
+        <br />
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+
+        <br />
+
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword"></span>
+
+        <br />
+
+        <label asp-for="Age"></label>
+        <input asp-for="Age" />
+        <span asp-validation-for="Age"></span>
+
+        <br />
+
+        <label asp-for="isAgree"></label>
+        <input asp-for="isAgree" />
+        <span asp-validation-for="isAgree"></span>
+
+        <br />
+
+        <input type="submit" value="Registration" class="btn-reg" />
+    </form>
+</div>

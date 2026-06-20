@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @* Стили он просто скопировал и переписывать я не хочу 
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/menustyle.css" /> *@
+</head>
+<body>
+    <nav class="menu-list">
+        <ul class="menu">
+            <li><a asp-controller="Home" asp-action="HomePage">Home</a></li>
+            <li><a asp-controller="RegistrationUser" asp-action="Registration">Registration</a></li>
+            <li><a asp-controller="RegistrationUser" asp-action="Login">Login</a></li>
+            <li><a asp-controller="About" asp-action="Abouts">About</a></li>
+            <li><a asp-controller="Contacts" asp-action="Contact">Contact</a></li>
+        </ul>
+    </nav>
+    <br />
+    <div class="main">
+        @RenderBody()
+    </div>
+    <footer>
+        This is private of CBS. Practice task
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

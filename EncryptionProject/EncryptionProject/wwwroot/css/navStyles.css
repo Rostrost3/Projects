@@ -1,0 +1,38 @@
+﻿nav {
+    background-color: #d1d5db;
+    padding: 15px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #444;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #dcce2d;
+    color: #1a1a1a;
+}
+
+nav ul li a.active {
+    background-color: #444;
+    color: #fff;
+}
+
+.welcome {
+    text-align: center;
+}

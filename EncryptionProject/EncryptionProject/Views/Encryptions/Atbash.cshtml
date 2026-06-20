@@ -1,0 +1,24 @@
+﻿@model AtbashModel
+
+@{
+    ViewData["Title"] = "Atbash";
+    Layout = "_Navigation";
+}
+
+<div class="centerForm">
+    <form asp-controller="Encryptions" asp-action="Atbash" method="post" class="forms">
+        <div class="sectionInput">
+            <label asp-for="Text"></label>
+            <textarea asp-for="Text" cols="15"></textarea>
+            <span asp-validation-for="Text"></span>
+        </div>
+
+        <div>
+            <label asp-for="IsEncryp"></label>
+            <input asp-for="IsEncryp" />
+            <span asp-validation-for="IsEncryp"></span>
+        </div>
+
+        <button type="submit">Result</button>
+    </form>
+</div>

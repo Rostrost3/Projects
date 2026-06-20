@@ -1,0 +1,20 @@
+﻿@model UserRegistrationModel
+
+<div class="reg-form">
+    <h1>Login</h1>
+
+    <br />
+    <form asp-controller="RegistrationUser" asp-action="Login" method="post">
+        <label asp-for="Mail"></label>
+        <input asp-for="Mail" />
+        <span asp-validation-for="Mail"></span>
+
+        <br />
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+
+        <input type="submit" value="Login" class="btn-reg" />
+    </form>
+</div>

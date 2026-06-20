@@ -1,0 +1,107 @@
+﻿@page "/reg"
+@layout EmptyLayout
+
+@inject SendRequestService SendRequestService
+@inject ILocalStorage LocalStorage
+@inject ForceExitService ForceExitService
+@inject NavigationManager NavManager
+
+<div class="d-flex flex-column justify-content-center align-items-center h-100">
+    <div class="card p-4 bg-light bg-gradient">
+        <h3 class="text-center mb-4">Registration</h3>
+
+        <EditForm Model="regModel" OnValidSubmit="SubmitAsync">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Enter User Name</label>
+                <TextInput id="userName" @bind-Value="regModel.UserName"></TextInput>
+                <ValidationMessage For="@(() => regModel.UserName)"></ValidationMessage>
+        
+                @if (fieldErrors.ContainsKey("UserName"))
+                {
+                    foreach(var error in fieldErrors["UserName"])
+                    {
+                        <div class="text-danger">@error</div>
+                    }
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Enter Email</label>
+                <TextInput id="email" @bind-Value="regModel.Email"></TextInput>
+                <ValidationMessage For="@(() => regModel.Email)"></ValidationMessage>
+
+                @if (fieldErrors.ContainsKey("Email"))
+                {
+                    foreach (var error in fieldErrors["Email"])
+                    {
+                        <div class="text-danger">@error</div>
+                    }
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Enter Password</label>
+                <PasswordInput id="password" @bind-Value="regModel.Password"></PasswordInput>
+                <ValidationMessage For="@(() => regModel.Password)"></ValidationMessage>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <PasswordInput id="confirmPassword" @bind-Value="regModel.ConfirmPassword"></PasswordInput>
+                <ValidationMessage For="@(() => regModel.ConfirmPassword)"></ValidationMessage>
+            </div>
+            
+            <div class="d-flex justify-content-center">
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Register</Button>
+            </div>
+        </EditForm>
+
+        <div class="d-flex justify-content-end">
+            <a href="/login" class="reg-link">Login</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    RegModel regModel = new();
+    Dictionary<string, List<string>> fieldErrors = new();
+
+    private async Task SubmitAsync()
+    {
+        try
+        {
+            fieldErrors.Clear();
+
+            var json = JsonSerializer.Serialize(regModel);
+
+            using var response = await SendRequestService.SendAsync(HttpMethod.Post, "api/user/reg", json);
+            var streamResponse = await response!.Content.ReadAsStreamAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errors = await JsonSerializer.DeserializeAsync<Dictionary<string, List<string>>>(streamResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if(errors != null)
+                {
+                    fieldErrors = errors;
+                }
+            }
+            else
+            {
+                var token = await JsonSerializer.DeserializeAsync<AuthResponse>(streamResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                await LocalStorage.SetKeyAsync(token!.Token);
+
+                using var resp = await SendRequestService.SendAsync(HttpMethod.Post, "api/cart/addnew");
+                var streamResp = await resp!.Content.ReadAsStreamAsync();
+
+                NavManager.NavigateTo("/");
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"[SendRequestService] ERROR {ex.Message}");
+            await ForceExitService.Exit();
+        }
+    }
+}

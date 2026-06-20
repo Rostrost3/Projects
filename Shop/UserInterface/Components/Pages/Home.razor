@@ -1,0 +1,33 @@
+﻿@page "/"
+@page "/{searchtext}"
+@rendermode InteractiveServer
+
+@inject ProductInfoService ProductInfoService
+
+<PageTitle>Home</PageTitle>
+
+<ProductCards />
+
+@code {
+    [Parameter]
+    public string? searchtext { get; set; }
+
+    private bool isInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isInitialized = true;
+            await ProductInfoService.LoadDataAsync();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(isInitialized)
+        {
+            await ProductInfoService.LoadDataAsync(searchtext!);
+        }
+    }
+}

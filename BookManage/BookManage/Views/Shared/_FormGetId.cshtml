@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FormGetId</title>
+</head>
+<body>
+    @RenderBody()
+
+    <div style="background-color:beige; display: flex; flex-direction: column; padding-top: 20px; padding-bottom: 15px;">
+        <h2>Достать книгу по id</h2>
+        <form action="/Books/Details" method="post">
+            <input type="number" placeholder="Введите номер id" name="id" required />
+            <input type="submit" value="Посмотреть книгу" />
+        </form>
+    </div>
+
+    <div style="background-color:aliceblue; display: flex; flex-direction: column; margin-top: 20px; padding-bottom: 10px;">
+        <h2>Сортировка разными способами</h2>
+        <a href="Books/Index?sort=title">Сортировка по названиям</a>
+        <a href="Books/Index?sort=author">Сортировка по авторам</a>
+        <a href="Books/Index?sort=year">Сортировка по годам</a>
+    </div>
+</body>
+</html>

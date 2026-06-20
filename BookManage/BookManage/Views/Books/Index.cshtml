@@ -1,0 +1,18 @@
+﻿@using BookManage.Models;
+@model List<Book>;
+
+@if (Model.Count > 0)
+{
+    <p>Сейчас у тебя есть такие книги:</p>
+}
+else
+{
+    <p>Сейчас у тебя нет никаких книг</p>
+}
+<ul>
+    @foreach (Book book in @Model)
+    {
+        <li>@book.Title; @book.Author; @book.Year</li>
+    }
+</ul>
+<a href="/Books/Create">Добавить книгу</a>

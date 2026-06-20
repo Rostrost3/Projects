@@ -1,0 +1,29 @@
+networks:
+  notesapp:
+
+services:
+  demoappbd:
+    container_name: app-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+     - 8002:1433
+    environment:
+     - ACCEPT_EULA=Y
+     - SA_PASSWORD=${DB_SA_PASSWORD}
+    networks:
+     - notesapp
+
+  notesapp:
+    container_name: notes-app
+    image: rostrost/notesapp
+    ports:
+      - 8001:8080
+    depends_on:
+     - demoappbd
+    environment:
+     - DB_HOST=demoappbd
+     - DB_NAME=NotesApp
+     - DB_USER=sa
+     - DB_PASSWORD=${DB_SA_PASSWORD}
+    networks:
+     - notesapp

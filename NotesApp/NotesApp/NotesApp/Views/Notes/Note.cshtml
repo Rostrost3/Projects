@@ -1,0 +1,15 @@
+﻿@model Note
+
+@{
+    Layout = "_Navigation";
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="card shadow-lg p-4">
+    <form asp-controller="Notes" asp-action="Note" method="post" class="d-flex flex-column" style="height: 80vh;">
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="Title" class="form-control form-control-lg mb-3" placeholder="Note title" />
+        <textarea asp-for="Content" class="form-control flex-grow-1 mb-3" placeholder="Write your note here..."></textarea>
+        <button type="submit" class="btn btn-success btn-lg align-self-end">💾 Save</button>
+    </form>
+</div>

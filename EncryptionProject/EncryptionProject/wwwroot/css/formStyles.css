@@ -1,0 +1,60 @@
+﻿.forms {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    font-size: 40px;
+    border: 2px solid #d1d5db;
+    background-color: #f9f9f9;
+    color: #1f2937;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.forms button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.forms button:hover {
+    background-color: #2563eb;
+}
+
+.forms div span {
+    color: #ef4444;
+    font-size: 16px;
+    max-width: 300px;
+    align-self: flex-start;
+}
+
+.forms .sectionInput textarea {
+    width: 300px;
+    height: 100px;
+    overflow-wrap: break-word; 
+}
+
+.forms .sectionInput input:not([type=checkbox]) {
+    width: 250px;
+    height: 20px;
+}
+
+.sectionInput {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.centerForm {
+    display: flex;
+    justify-content: center;
+}

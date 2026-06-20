@@ -1,0 +1,113 @@
+﻿@inject ProductInfoService ProductInfoService
+@inject ImageService ImageService
+@inject NavigationManager NavManager
+
+@if (ProductInfoService.allCartItemsInCartDTO is null || ProductInfoService.productsDTO is null)
+{
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-5 mt-5">
+        @foreach (var prod in ProductInfoService.productsDTO)
+        {
+            var cartItem = ProductInfoService.GetCartItemForProduct(prod.Id);
+            @if(OnlyShowCartItems && (cartItem is null || cartItem.Quantity <= 0))
+            {
+                continue;
+            }
+
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src=@(ImageService.GetFullImageUrl(prod.ImageUrl)) alt="Card image" />
+                <div class="card-body">
+                    <h5 class="card-title">@prod.Price</h5>
+                    <p class="card-text">@prod.Name</p>
+                    @if (cartItem is not null && cartItem.Quantity != 0)
+                    {
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Info" @onclick="@(() => ProductInfoService.UpdateCartItem(cartItem, false))">-</Button>
+                        @cartItem.Quantity
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Info" @onclick="@(() => ProductInfoService.UpdateCartItem(cartItem, true))">+</Button>
+                    }
+                    else
+                    {
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Info" @onclick="@(() => ProductInfoService.ClickAddToCart(prod.Id))">Add To Cart</Button>
+                    }
+                    @if (ProductInfoService.isAdmin)
+                    {
+                        <div class="mt-2">
+                            <Button Type="ButtonType.Button" Color="ButtonColor.Light" @onclick="@(() => ClickEdit(prod.Id))">Edit</Button>
+                            <Button Type="ButtonType.Button" Color="ButtonColor.Danger" @onclick="@(() => ProductInfoService.ClickDelete(prod.Id))">Delete</Button>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <Modal @ref="modal" UseStaticBackdrop="true" CloseOnEscape="false" IsVerticallyCentered="true"> 
+        <BodyTemplate> 
+            <EditForm Model="product" OnSubmit="SaveModalClickAsync"> 
+                <p> 
+                    Name:<br /> 
+                    <InputText @bind-Value="product.Name"></InputText> 
+                    </p> <p> 
+                    Price:<br /> 
+                    <InputNumber @bind-Value="product.Price"></InputNumber> 
+                </p> 
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Save Changes</Button> 
+            </EditForm> 
+        </BodyTemplate> 
+        <FooterTemplate> 
+            <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClickAsync">Close</Button> 
+        </FooterTemplate> 
+    </Modal>
+}
+
+@code {
+    [Parameter]
+    public bool OnlyShowCartItems { get; set; } = false;
+
+    private ProductDTO product = new();
+
+    private Modal modal = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ProductInfoService.OnChange += StateHasChanged;
+        }
+    }
+
+    private async Task ClickEdit(int id)
+    {
+        var productEdit = await ProductInfoService.ClickEdit(id);
+
+        if(productEdit != null)
+        {
+            product = productEdit;
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
+
+        await modal.ShowAsync();
+    }
+
+    private async Task SaveModalClickAsync()
+    {
+        await ProductInfoService.SaveModalClickAsync(product);
+
+        await modal.HideAsync();
+    }
+
+    private async Task OnHideModalClickAsync()
+    {
+        await modal.HideAsync();
+    }
+}
