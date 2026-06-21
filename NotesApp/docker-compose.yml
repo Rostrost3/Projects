@@ -9,13 +9,16 @@ services:
      - 8002:1433
     environment:
      - ACCEPT_EULA=Y
-     - SA_PASSWORD=${DB_SA_PASSWORD}
+     - SA_PASSWORD=(123basketcoding456)
     networks:
      - notesapp
 
   notesapp:
     container_name: notes-app
-    image: rostrost/notesapp
+    image: ${DOCKER_REGISTRY-}notesapp
+    build:
+      context: .
+      dockerfile: NotesApp/Dockerfile
     ports:
       - 8001:8080
     depends_on:
@@ -24,6 +27,6 @@ services:
      - DB_HOST=demoappbd
      - DB_NAME=NotesApp
      - DB_USER=sa
-     - DB_PASSWORD=${DB_SA_PASSWORD}
+     - DB_PASSWORD=(123basketcoding456)
     networks:
      - notesapp
