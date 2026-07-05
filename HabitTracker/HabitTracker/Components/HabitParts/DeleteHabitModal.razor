@@ -1,0 +1,66 @@
+﻿@inject ISendRequest SendRequest
+
+<Modal @ref="deleteHabitModal">
+    <BodyTemplate>
+        @if (!string.IsNullOrEmpty(deleteHabitModalError))
+        {
+            <div class="alert alert-danger mb-3">
+                @deleteHabitModalError
+            </div>
+        }
+
+        Are you sure you want to break the habit?
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideDeleteHabitModalClick">No</Button>
+        <Button Color="ButtonColor.Primary" @onclick="OnDeleteHabitModalClick">Yes</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    [Parameter]
+    public EventCallback OnSuccess { get; set; }
+
+    Modal deleteHabitModal = default!;
+
+    int deleteId;
+
+    string? deleteHabitModalError;
+
+    public async Task ShowDeleteHabitModal(int id)
+    {
+        deleteId = id;
+        await deleteHabitModal.ShowAsync();
+    }
+
+    private async Task OnHideDeleteHabitModalClick()
+    {
+        await deleteHabitModal.HideAsync();
+    }
+
+    private async Task OnDeleteHabitModalClick()
+    {
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Delete, $"habit/delete/{deleteId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            await deleteHabitModal.HideAsync();
+            await OnSuccess.InvokeAsync();
+        }
+        else
+        {
+            deleteHabitModalError = "Server error - " + response.StatusCode;
+
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if (!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    deleteHabitModalError = servResult.ErrorMessage;
+                }
+            }
+            catch { }
+        }
+    }
+}

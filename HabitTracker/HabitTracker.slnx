@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path=".env" />
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Project Path="HabitTracker/HabitTracker.csproj" />
+</Solution>

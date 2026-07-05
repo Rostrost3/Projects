@@ -1,0 +1,284 @@
+﻿@page "/"
+
+@inject ISendRequest SendRequest
+@inject IAppLocalStorage LocalStorage
+@inject NavigationManager NavManager
+
+@if(!isInitialized)
+{
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid min-vh-100 bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+            <a class="navbar-brand fw-bold" href="/">HabitTracker</a>
+
+            <div class="ms-auto">
+                <span class="me-3 fw-semibold">Hello, @userName</span>
+
+                @if (!isAuthorize)
+                {
+                    <button class="btn btn-outline-primary me-2" @onclick="OnShowLoginUserModalClick">Login</button>
+
+                    <button class="btn btn-primary" @onclick="OnShowRegUserModalClick">Register</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-danger" @onclick="OnLogoutClick">Logout</button>
+                }
+
+            </div>
+        </nav>
+
+        <div class="d-flex justify-content-center align-items-start pt-5">
+
+            <div class="card shadow-sm p-4" style="width: 700px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">My Habits</h3>
+
+                    @if(isAuthorize)
+                    {
+                        <button class="btn btn-primary" @onclick="OnShowAddHabitModalClick">+ Add Habit</button>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(error))
+                {
+                    <div class="alert alert-danger mb-3">@error</div>
+                }
+
+                @if (isAuthorize && habits.Any())
+                {
+                    <ul class="list-group">
+
+                        @foreach (var habit in habits)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+
+                                <div class="d-flex align-items-center">
+                                    <input class="form-check-input me-3" type="checkbox" checked="@habit.IsChecked" @onclick="@(() => OnCheckClick(habit))" />
+
+                                    <span class="@(habit.IsChecked ? "text-decoration-line-through text-muted" : "")">@habit.Name</span>
+                                </div>
+
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-2" @onclick="@(() => OnShowEditHabitModalClick(habit.Id))">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="@(() => OnShowDeleteHabitModalClick(habit.Id))">Delete</button>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="mb-4">
+                        <span class="fw-semibold">
+                            Progress: @habits.Count(x => x.IsChecked) / @habits.Count completed
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">No habits yet. Register and start by creating one.</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<AddHabitModal @ref="addHabitComponent" OnSuccess="LoadHabitsFromApi" />
+
+<EditHabitModal @ref="editHabitModal" OnSuccess="LoadHabitsFromApi" />
+
+<DeleteHabitModal @ref="deleteHabitModal" OnSuccess="LoadHabitsFromApi" />
+
+<Modal @ref="regUserModal">
+    <BodyTemplate>
+        <Register OnSuccess="SubmitRegUserModal" />
+    </BodyTemplate>
+</Modal>
+
+<Modal @ref="loginUserModal">
+    <BodyTemplate>
+        <Login OnSuccess="SubmitLoginUserModal" />
+    </BodyTemplate>
+</Modal>
+
+@code {
+    List<HabitModel> habits = new();
+
+    bool isInitialized = false;
+
+    string? error;
+
+    bool isAuthorize;
+
+    string userName = "Anonymous";    
+
+    AddHabitModal addHabitComponent = default!;
+
+    EditHabitModal editHabitModal = default!;
+
+    DeleteHabitModal deleteHabitModal = default!;
+
+    Modal regUserModal = default!;
+
+    Modal loginUserModal = default!;
+
+
+    private async Task LoadHabitsFromApi()
+    {
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Get, "habit/getall");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var serviceResult = await response.Content.ReadFromJsonAsync<ServiceResult<List<HabitModel>>>();
+            habits = serviceResult!.Data!;
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            isAuthorize = false;
+        }
+        else
+        {
+            isAuthorize = false;
+            error = $"Server error - {response.StatusCode}";
+            try
+            {
+                var serviceResult = await response.Content.ReadFromJsonAsync<ServiceResult<List<HabitModel>>>();
+
+                if (!string.IsNullOrEmpty(serviceResult?.ErrorMessage))
+                {
+                    error = serviceResult.ErrorMessage;
+                }
+            }
+            catch {}
+        }
+    }
+
+    private async Task LoadUserNameFromApi()
+    {
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Get, "user/getname");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+            userName = servResult!.Data!;
+        }
+        else
+        {
+            error = "Server error - " + response.StatusCode;
+
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if (!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    error = servResult.ErrorMessage;
+                }
+            }
+            catch { }
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            if(!string.IsNullOrEmpty(await LocalStorage.GetTokenAsync()))
+            {
+                isAuthorize = true;
+                await LoadHabitsFromApi();
+                await LoadUserNameFromApi();
+            }
+
+            isInitialized = true;
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnShowAddHabitModalClick()
+    {
+        await addHabitComponent.ShowAddHabitModalAsync();
+    }
+
+    private async Task OnShowEditHabitModalClick(int id)
+    {
+        await editHabitModal.ShowEditHabitModalAsync(id);
+    }
+
+    private async Task OnShowDeleteHabitModalClick(int id)
+    {
+        await deleteHabitModal.ShowDeleteHabitModal(id);
+    }
+
+    private async Task OnShowRegUserModalClick()
+    {
+        await regUserModal.ShowAsync();
+    }
+
+    private async Task SubmitRegUserModal()
+    {
+        await regUserModal.HideAsync();
+        await LoadHabitsFromApi();
+        await LoadUserNameFromApi();
+        isAuthorize = true;
+    }
+
+    private async Task OnShowLoginUserModalClick()
+    {
+        await loginUserModal.ShowAsync();
+    }
+
+    private async Task SubmitLoginUserModal()
+    {
+        await loginUserModal.HideAsync();
+        await LoadHabitsFromApi();
+        await LoadUserNameFromApi();
+        isAuthorize = true;
+    }
+
+    private async Task OnLogoutClick()
+    {
+        await LocalStorage.DeleteTokenAsync();
+        isAuthorize = false;
+        habits = new();
+        userName = "Anonymous";
+    }
+
+    private async Task OnCheckClick(HabitModel habit)
+    {
+        habit.IsChecked = !habit.IsChecked;
+
+        JsonContent content = JsonContent.Create(habit);
+
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Put, "habit/update", content);
+
+        if(response.IsSuccessStatusCode)
+        {
+            await LoadHabitsFromApi();
+        }
+        else
+        {
+            error = "Server error - " + response.StatusCode;
+
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if(!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    error = servResult.ErrorMessage;
+                }
+            }
+            catch {}
+        }
+    }
+}

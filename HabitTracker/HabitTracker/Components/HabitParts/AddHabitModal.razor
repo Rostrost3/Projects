@@ -1,0 +1,89 @@
+﻿@inject ISendRequest SendRequest
+
+<Modal @ref="addHabitModal">
+    <BodyTemplate>
+        <EditForm EditContext="addHabitEditContext">
+            <DataAnnotationsValidator />
+
+            @if (!string.IsNullOrEmpty(addHabitModalError))
+            {
+                <div class="alert alert-danger mb-3">
+                    @addHabitModalError
+                </div>
+            }
+
+            <div class="mb-3">
+                <label for="name">Name</label>
+                <br />
+                <TextInput id="name" @bind-Value="addHabitModel.Name"></TextInput>
+                <ValidationMessage For="@(() => addHabitModel.Name)"></ValidationMessage>
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideAddHabitModalClick">Close</Button>
+        <Button Color="ButtonColor.Primary" @onclick="OnAddHabitModalClick">Add</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    [Parameter]
+    public EventCallback OnSuccess { get; set; } 
+
+    Modal addHabitModal = default!;
+
+    HabitModel addHabitModel = new();
+
+    EditContext? addHabitEditContext;
+
+    string? addHabitModalError;
+
+    protected override void OnInitialized()
+    {
+        addHabitEditContext = new EditContext(addHabitModel);
+
+        addHabitEditContext.OnFieldChanged += (sender, args) =>
+        {
+            addHabitEditContext.Validate();
+        };
+    }
+
+    public async Task ShowAddHabitModalAsync()
+    {
+        await addHabitModal.ShowAsync();
+    }
+
+    private async Task OnHideAddHabitModalClick()
+    {
+        await addHabitModal.HideAsync();
+    }
+
+    private async Task OnAddHabitModalClick()
+    {
+        JsonContent content = JsonContent.Create(addHabitModel);
+
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Post, "habit/create", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await addHabitModal.HideAsync();
+            await OnSuccess.InvokeAsync();
+        }
+        else
+        {
+            addHabitModalError = $"Server error - {response.StatusCode}";
+
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if (!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    addHabitModalError = servResult.ErrorMessage;
+                }
+            }
+            catch { }
+        }
+    }
+
+}

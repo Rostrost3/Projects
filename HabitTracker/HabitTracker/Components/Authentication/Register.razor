@@ -1,0 +1,100 @@
+﻿@inject ISendRequest SendRequest
+@inject NavigationManager NavManager
+@inject IAppLocalStorage LocalStorage
+
+<div class="d-flex flex-column justify-content-center align-items-center h-100">
+    <div class="card p-4 bg-light bg-gradient">
+        <h3 class="text-center mb-4">Registration</h3>
+
+        <EditForm EditContext="editContext" OnValidSubmit="ValidSubmitAsync">
+            <DataAnnotationsValidator />
+
+            @if(!string.IsNullOrEmpty(error))
+            {
+                <div class="text-danger">@error</div>
+            }
+
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <br />
+                <TextInput id="email" @bind-Value="model.Email"></TextInput>
+                <ValidationMessage For="@(() => model.Email)"></ValidationMessage>
+            </div>
+
+            <div class="mb-3">
+                <label for="name">Name</label>
+                <br />
+                <TextInput id="name" @bind-Value="model.Name"></TextInput>
+                <ValidationMessage For="@(() => model.Name)"></ValidationMessage>
+            </div>
+
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <br />
+                <PasswordInput id="password" @bind-Value="model.Password"></PasswordInput>
+                <ValidationMessage For="@(() => model.Password)"></ValidationMessage>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword">Confirm password</label>
+                <br />
+                <PasswordInput id="confirmPassword" @bind-Value="model.ConfirmPassword"></PasswordInput>
+                <ValidationMessage For="@(() => model.ConfirmPassword)"></ValidationMessage>
+            </div>
+
+            <div class="mb-3 text-center">
+                <Button Color="ButtonColor.Primary" Type="ButtonType.Submit">Register</Button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnSuccess { get; set; }
+
+    EditContext? editContext;
+
+    RegModel model = new RegModel();
+
+    string? error;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(model);
+
+        editContext.OnFieldChanged += (sender, args) =>
+        {
+            editContext.Validate();
+        };
+    }
+
+    private async Task ValidSubmitAsync()
+    {
+        HttpContent content = JsonContent.Create(model);
+
+        HttpResponseMessage response = await SendRequest.SendRequestAsync(HttpMethod.Post, "user/reg", content);
+
+        if(response.IsSuccessStatusCode)
+        {
+            var authResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+            await LocalStorage.SetTokenAsync(authResult!.Data!);
+            if(OnSuccess.HasDelegate) await OnSuccess.InvokeAsync();
+        }
+        else
+        {
+            error = "Server error - " + response.StatusCode;
+
+            try
+            {
+                var authResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if(!string.IsNullOrEmpty(authResult?.ErrorMessage))
+                {
+                    error = authResult.ErrorMessage;
+                }
+            }
+            catch {}
+        }
+    }
+}

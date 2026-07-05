@@ -1,0 +1,31 @@
+services:
+ habittracker:
+  build: .
+  ports:
+    - "5001:8080"
+  depends_on:
+    - sqlserver
+  environment:
+    ASPNETCORE_URLS: "http://+:8080"
+    ConnectionString: "Server=sqlserver;Database=HabitTracker;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+    JWTOptions__Issuer: ${JWT_ISSUER}
+    JWTOptions__Audience: ${JWT_AUDIENCE}
+    JWTOptions__SecretKey: ${JWT_SECRET}
+    JWTOptions__ExpireHours: ${JWT_HOURS}
+    ApiBaseUrl: ${API_BASE_URL}
+  volumes:
+  - dp-keys:/app/keys
+
+ sqlserver:
+  image: mcr.microsoft.com/mssql/server:2025-latest
+  environment:
+    ACCEPT_EULA: "Y"
+    MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+  ports:
+    - "5003:1433"
+  volumes:
+  - sql-data:/var/opt/mssql
+
+volumes:
+  sql-data:
+  dp-keys:

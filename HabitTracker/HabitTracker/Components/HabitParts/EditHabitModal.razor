@@ -1,0 +1,107 @@
+﻿@inject ISendRequest SendRequest
+
+<Modal @ref="editHabitModal">
+    <BodyTemplate>
+        <EditForm EditContext="editHabitEditContext">
+            <DataAnnotationsValidator />
+
+            @if (!string.IsNullOrEmpty(editHabitModalError))
+            {
+                <div class="alert alert-danger mb-3">
+                    @editHabitModalError
+                </div>
+            }
+
+            <div class="mb-3">
+                <label for="name">Name</label>
+                <br />
+                <TextInput id="name" @bind-Value="editHabitModel.Name"></TextInput>
+                <ValidationMessage For="@(() => editHabitModel.Name)"></ValidationMessage>
+            </div>
+        </EditForm>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideEditHabitModalClick">Close</Button>
+        <Button Color="ButtonColor.Primary" @onclick="OnEditHabitModalClick">Edit</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    [Parameter]
+    public EventCallback OnSuccess { get; set; }
+
+    Modal editHabitModal = default!;
+
+    HabitModel editHabitModel = new();
+
+    EditContext? editHabitEditContext;
+
+    string? editHabitModalError;
+
+    protected override void OnInitialized()
+    {
+        editHabitEditContext = new EditContext(editHabitModel);
+
+        editHabitEditContext.OnFieldChanged += (sender, args) =>
+        {
+            editHabitEditContext.Validate();
+        };
+    }
+
+    public async Task ShowEditHabitModalAsync(int id)
+    {
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Get, $"habit/get/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<HabitModel>>();
+            editHabitModel = servResult!.Data!;
+            await editHabitModal.ShowAsync();
+        }
+        else
+        {
+            editHabitModalError = "Server error - " + response.StatusCode;
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<HabitModel>>();
+                if (!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    editHabitModalError = servResult.ErrorMessage;
+                }
+            }
+            catch { }
+        }
+    }
+
+    private async Task OnHideEditHabitModalClick()
+    {
+        await editHabitModal.HideAsync();
+    }
+
+    private async Task OnEditHabitModalClick()
+    {
+        JsonContent content = JsonContent.Create(editHabitModel);
+
+        var response = await SendRequest.SendRequestAsync(HttpMethod.Put, "habit/update", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await editHabitModal.HideAsync();
+            await OnSuccess.InvokeAsync();
+        }
+        else
+        {
+            editHabitModalError = "Server error - " + response.StatusCode;
+            try
+            {
+                var servResult = await response.Content.ReadFromJsonAsync<ServiceResult<string>>();
+
+                if (!string.IsNullOrEmpty(servResult?.ErrorMessage))
+                {
+                    editHabitModalError = servResult.ErrorMessage;
+                }
+            }
+            catch { }
+        }
+    }
+}
