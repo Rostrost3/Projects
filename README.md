@@ -37,3 +37,6 @@
 *   Frontend: Blazor (WebAssembly/Server), HTML5, CSS3
 *   Data Science: Pandas, Scikit-learn, Text Vectorization / Lemmatization
 *   Tools: Docker, Git, SSH config, Microsoft SQL Server
+
+## 🎓 Сертификаты
+- [Яндекс.Практикум — Frontend-разработка](./Yandex_certificate_frontend.pdf)
